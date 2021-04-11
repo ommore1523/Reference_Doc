@@ -1,0 +1,18 @@
+
+
+
+**** command line splitting using tmux 
+
+
+sudo apt install tmux ==> install tmux
+tmux ==> navigate to tmux  window
+ctr+b shift+%   ==> right side  window
+ctr+b shift+"   ==>below side window
+cr+b left-right-bottom-up arrow    ==> move to those windows
+
+
+==> it can run the sessions at backgroud....
+
+
+
+

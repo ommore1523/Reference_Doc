@@ -1,0 +1,121 @@
+
+# Variable :
+  var a=5;
+  let a=5;
+  const a=5;
+
+  var and let => could not declare variable twice in let ..you can assign only 
+
+  const will not assign new value
+
+# data types :
+  string ,number,boolean, array ,object ,null ,undefined
+
+  var a=null ==> type null
+  var a;    ==> undefined 
+
+# if , if_ else , if _else if _else
+# Ternary : (condition)? true statement: false statement	
+# switch (condition){
+  case condi1: { statement; break ;} 
+  case condi2: { stastement; break ;} 
+}
+
+# alert ("alert message")
+# confirm ("do u like")  => true=ok false=false 
+
+# function <fun_name> { statement }; -->delcaration
+  <fun_name>();  --> call 
+
+  // you can return value in function
+
+
+# local and global variable --> as usual 
+
+# initialisation ; 
+  while( condi ){
+     statements;
+     increment/decrement;
+   }
+
+#
+
+initialisation;
+do {
+statements;
+increm/decr
+}while(condition)
+
+
+# for (let i=0 ;i<5; i++){
+    statement;
+  }
+
+# break and continue 
+
+# 
+array[0]=7
+delete array[0]  --> it will not delete index 
+
+arr.sort() ,arr.reverse()
+arr.pop() ->remove last element
+arr.push() -> append at end 
+arr.shift()  ->  remove at start	
+arr.unshift() --> add at start
+arr1.concat(arr2) --> add total arrays 
+arr.join(' ')	-> join as string
+arr.slice(start,end)  -> slice array
+Array.isArray(arr) ->check is array 
+indexOf("search item",index_start_at)
+lastIndexOf("search item") 
+	
+
+# geelementbyid --> single element
+# getelementsbyclassname --> list
+# getelementbytagname --> list
+
+
+# queryselector(<cssselector>) exp ('.lst','#id') target first one
+# queryselectorall(<cssselector>)   target to all
+queryselector('#id h1')
+queryselector(<cssselector>).innerHTML  --> get inside html
+queryselector(<cssselector>).innertext  --> get inside text
+
+queryselector(<cssselector>).style.color='red'  CHANGE COLOr 
+queryselector(<cssselector>).className= 'xyz'   CHANGE CLASS WILL RETURN STRING
+queryselector(<cssselector>).classList= 'a b'   WILL RETRUN LIST
+
+queryselector(<cssselector>).classList.add("abc","a","fg"); add second class
+queryselector(<cssselector>).classList.remove("abc","a","fg");  remove
+
+
+classlist methods: add,remove ,toggle,containes,item,length
+
+
+
+
+
+eventlistener ==: best practice add eventlisten in js file ... exp 
+
+[I]=document.getelementbyid('id').onclick=functionname;
+and then write function
+
+[II] document.getelentbyid('id').addeventlistenr('click',funcname);  //best practice
+   OR
+ document.getelentbyid('id').addeventlistenr('click',function(){
+
+};
+);
+
+
+
+NOTE:
+addeventlistenr(event,function,usecapture) //when two dives overlapped 
+
+removeeventlistner
+
+
+
+
+
+	 

@@ -1,0 +1,122 @@
+
+# ************* Chunk file upload using angular 10 and flask application ***************************
+
+
+#  Python code :
+
+            ALLOWED_EXTENSIONS = {'zip', 'jpg', 'jpeg', 'png', 'gz', 'tar', 'iso', 'rpm', 'deb', 'pdf'}
+
+
+            class Get_status(BaseApi):
+                route_base=""
+                @expose('/getstatus')
+                @rison()
+                def greeting(self,**kwargs):
+                    # import pathlib module 
+                    from pathlib import Path
+                    # Read filename from input
+                    filename = kwargs['rison']['filename']
+
+                    # construct path object
+                    file_ctx = Path(filename)
+                    # check is file exists
+                    filesize = 0
+                    if file_ctx.is_file():
+                        filesize = file_ctx.stat().st_size
+                        uploaded_file_size = filesize
+                    result={"filename":filename,"filesize":filesize}
+                    
+                    return self.response(200 , result=result )
+            appbuilder.add_api(Get_status)
+
+
+            class UploadApi(BaseApi):
+
+                def allowed_file(self, filename: str) -> bool:
+                    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+
+                # upload data function 
+                route_base=""
+                @expose('/upload', methods=['POST', 'GET'])
+                def upload_data(self):
+                    if request.method == 'POST':
+                        files = request.files 
+                        if type(files['client_files']) is FileStorage:
+                            value = files['client_files']
+                        else:
+                            key = files.keys()[0]
+                            value = files[key]
+                        filename = secure_filename(request.form['file_name'])
+                        offset=request.form['offset']
+                        print("\n"+str(offset)+"\n")
+                        if not self.allowed_file(filename):
+                            return jsonify({"message": "please upload only zip files"})
+                        with open(filename, 'ab') as f:
+                            f.seek(int(offset))
+                            f.write(value.stream.read())
+                        return self.response(201, message="File Written successfully")
+                    return self.response(200, message="GET REQUEST")
+            appbuilder.add_api(UploadApi)
+
+
+
+# angular code :
+
+  ### component.html 
+
+             
+
+ ### component.ts 
+        
+        // Run as file selected 
+        onSelectfile(event){
+            this.getstatus_api=this.baseUrl+"getstatus?q=(filename:"+event.currentFiles[0].name+")"
+            const status=this.apiService.get_status(this.getstatus_api).subscribe(res=>{
+            this.previous_filesize = res['result']['filesize']
+            })
+        }
+        
+
+
+        // run after file upload click 
+        async onuploadfile(event) {
+            let import_file = event.files[0];
+            const chunkSize = 10000000;
+            for( let offset = 0; offset < event.files[0].size; offset += chunkSize ){
+                const chunk = event.files[0].slice( offset, offset + chunkSize );
+                const apiResponse = await  this.apiService.sendChunk(chunk, offset ,import_file.name).toPromise().then(
+                    res=>{}
+                );
+            }
+        }
+
+
+ ### environment.ts 
+
+        export const environment = {
+        production: false,
+        rest_api_url:'http://127.0.0.1:5000/'
+        };
+
+### fileupload.service.ts 
+
+        baseUrl = environment.rest_api_url;
+        
+
+        constructor( private http:HttpClient) { }
+
+        get_status(api){
+            const status_api=api;
+            return this.http.get(status_api)
+        }
+
+
+        sendChunk(chunk,offset, fileName) {
+            console.log(chunk)
+            const APIurl = this.baseUrl+'upload';
+            let formData = new FormData();
+            formData.append('client_files', chunk);
+            formData.append('offset', offset);
+            formData.append('file_name', fileName);
+            console.log(typeof(formData))
+        return  this.http.post(APIurl, formData);

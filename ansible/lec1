@@ -1,0 +1,10 @@
+
+
+ ansible is open source resource automation software .Some task that system admin do manually can be possible with using 
+ ansible easily . configuration of server , installing software .
+ 
+ ansible configuration is done using different langugaes like python ruby scripting . in ansible there are module available which 
+ helps to do configuration like taking backup and copying files. If there is no module present you can create by your own 
+ 
+ to use all thing you need to install ansible software on your machine and python.  Now your machine will become ansible server/  controller
+ 

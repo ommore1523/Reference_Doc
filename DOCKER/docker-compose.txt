@@ -1,0 +1,55 @@
+
+# ************* DOCKER-COMPOSE ***************
+
+use for container deployment ,  Use yaml file to provisioning and deprovisoning of resources
+
+advantage : resources creates withing the sec and delete within the sec
+adtg : if the any machine crashes ..then you can use yaml file and make provison for resources 
+
+exp: 50 container of diff config . Then you can create yaml file for 50 container . and up the file .
+
+
+
+
+#######################################################################
+
+install docker compose :    https://docs.docker.com/compose/install/
+
+
+docker-compose up -d
+docker-compose down 
+docker container ls
+docker-compose scale <service_name=count> <service_name2=count>   ==>scale up and down (can reduce/increase )
+docker-compose ps  ==> show all container that createed by compose
+docker-compose stop   ==> all deplyement will stop that created by compose 
+docker-compose start
+docker compose restart
+
+docker-compose --help
+docker-compose up --no-start  ==> will create service but not start 
+docker compose rm ==> remove stop container created by docker compose   
+
+
+docker-compose -f <filename.yml> up -d  => create containers with self name given file 
+docker-compose -f <filename.yml> down   => down containers with self name given file 
+
+
+creating resources using json file :
+
+google tool yaml to json 
+save file using <filename.json>
+docker-compose  -f cloud.json up -d
+
+
+docker compose up vs docker compose build :: both used for creating resource but if you have yaml
+file with no of resourced defined then up will create all of them but build will create where 
+want to create/build image .
+
+docker compose config  => view content (as like cat read only)
+
+----||---- events => create an events what is happenning while up the file
+----||---exec <composefile> <cmd> create container  and execute command      
+
+images ,kill, pause 
+
+pull : 
