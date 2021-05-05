@@ -1,0 +1,56 @@
+
+
+########################### ********************* PYTHON ******************************** ##########################################
+
+with open(self.data_path + "pred_"+image_name, "rb") as img_file:
+           b64_string = base64.b64encode(img_file.read())
+
+           out_data = {'base64Str':b64_string,'image_name' : image_name ,'time_taken':elapsed_time}
+                
+           send_socket('dpresult',NAMESPACE,self.workspace_id, message = b64_string)
+           
+           
+           
+########################## ******************* ANGULAR service solver.ts ************************* #################################
+
+
+
+base64string :any
+
+
+this.socket.on('dpresult', (data) => {
+      console.log("Detection  prediction result ---------> "+data['msg']);
+      this.base64string = data['msg']
+
+    });
+    
+###################### ************************* Component.ts ************************************** ###############################
+
+thumbnail: any;
+
+
+ngDoCheck(){
+        
+        let array_buffer_data = this.sloverService.base64string     
+        console.log(array_buffer_data)   
+        let typed_array= new Uint8Array(array_buffer_data)
+        
+        // if image size is less than 1mb
+        let base64string = String.fromCharCode.apply(null , typed_array)
+                  
+                   OR 
+           // if image size is more than 1 mb         
+           const base64string = typed_array.reduce((data , bytes) => {
+          return data +String.fromCharCode(bytes);
+          } , '');
+          
+          
+          
+        let objectURL = "data:image/jpeg;base64,"+base64string
+        this.thumbnail = this.domSanitizer.bypassSecurityTrustUrl(objectURL)
+        
+        }
+        
+##################################### ************************ html ********************************** ###########################        
+        
+        <img id="myimage" [src]='thumbnail'  height="100px" width="100px"/>

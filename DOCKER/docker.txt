@@ -1,0 +1,219 @@
+
+
+
+**************** TUTORIAL 1 : **********************
+
+1. docker --help
+2. docker container --help
+3. docker container ls 
+4. docker container ls -a
+5. docker container run ubunutu --> create and stop immediatly
+6. docker conatiner run ubuntu sleep 5 --> run for 5sec in frontline 
+7. docker container run -d ubunut sleep 5 --> run 5sec in background
+8. docker container run -dit ubuntu --> keep running container 
+9. docker container stop container_id  --> stop running container 
+10. docker container start container_id --> start container
+11. docker container restart container_id --> restart container
+12. docker container rm container_id --> remove stopped container 
+13. docker container rm container_id -f --> remove forcefully runnin   
+    container
+
+14. docker container run -it ubuntu /bin/bash  --> create and entry into    container      	
+15. docker inspect container_id --> check container ip and info
+
+16. **** configure apache2 on container LAB ******* 
+
+17. ctr+p and ctr+q  ..without stop come out from container
+18. docker container top --> check processes
+19. docker container stat contaner_id --> check memory used
+
+(we can utilize resources good way)
+
+
+
+
+**************** TUTORIAL 2 : **********************
+
+docker container run -it -p:3600:80 ubunut /bin/bash 
+(docker ip 80 ,my pc 3600)
+
+
+docker container rename con_id new_name
+
+exit  -> stop and come out
+
+docker container -it --name name_of_container ubuntu  ->name while create 
+
+docker container attach name/id --> enter to running container
+
+docker container pause id  --> docker container pause 
+
+docker container wait id/name  -> wait till kill container 
+
+docker container kill id/name --> kill the container
+
+
+kill-> stop forcefully stop--> gracefully
+
+
+docker container cp filename id:path  -> copy from local 
+
+docker container export id -o image.tar --> export container tar file
+docker image import image.tar image_namedocke
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Docker</title>
+    </head>
+    <body>
+        <h1>Volume content </h1>
+    </body>
+</html>
+
+
+docker hub is central repository for sharing images 
+
+
+
+
+
+****************** DOCKER VOLUME : ************************
+
+create container and run apache2 with website
+
+
+no setting for attach volume in existing container
+
+
+docker volume create myvolume_name -->create volume name 
+
+docker container run -it -v myvolume:/tmp --name web-server1 ubuntu /bin/bash
+
+
+
+*********** Docker Swarm ***********
+
+docker swarm init --> make node manager 
+
+(take a comand and and run on workders to run make them worker)
+
+docker node ls --> check docker nodes present
+
+docker node promote id  ->promote as manager
+
+docker node demote id --> demote as worker
+
+
+Remove Node  from manager node :
+docker node rm id --force  --> remove forcefully bcz cant remove the directlty until it not down  (run from manager)
+docker swarm leave (run from worker )
+
+* worker se leave kre to it will down but will be the part of cluster then to remove from cluster run rm cmd from manager
+
+docker swarm join-token worker   ->get worker token 
+docker swarm join-token manager  -> get manager token	
+
+
+
+docker service create --name web-server --replicas 3  nginx
+
+docker service ls 
+
+docker service ps service_id --> check where the conatianers deployed
+
+
+(if any condition docker container destroy the automatically it will create new to fullfill  desired value)
+(if that node poweroffs then their containers will shift to another)
+
+
+docker service scale service_id=number --> scale up 
+
+
+(if one node has 10 machines then every machine will map with same port bcz it used ingress load balnace inside node ..so trafiic hits firts to ingress and ingress to container )
+
+docker service create --name nginx-server -p 8000:80 --replicas 3 nginx 
+
+
+LIVE SCENARIO :
+
+ you created docker imager using docker file 
+ create private registery and add that image
+ build image from docker file 
+ run service with replicas 
+ if you want to update image then change docker file and run
+ -> docker service update --image appimagename sevice_id
+* (it will update sequencially ) not parellay 
+* docker service rollback --> if any error occures  
+
+
+
+TUTORIAL -5
+
+docker swarm visualiser :
+
+command :=>
+
+ docker service create \
+  --name=viz \
+  --publish=8080:8080/tcp \
+  --constraint=node.role==manager \
+  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  dockersamples/visualizer
+
+
+TUTORIAL -6:
+  labels :
+        if you want to choose that the replicas should work on selected nodes it may manager or worker :
+exp i want to create 4 replicas but that containers should only created on workers  that time labels help
+(need : if any high configuration machine is present the create more container on that )
+
+  Two types of labels present :  1. predefined(manager,worker)  2. userdefined (we can set by own)
+
+
+docker node inspect node_id ==> check node label 
+
+
+docker service create --name web-server -p 80:80 --replica 3 --contraint="node.role==manager" nginx
+docker service create --name web-server -p 80:80 --replica 3 --contraint="node.role==worker" nginx
+
+
+label set from manager or from worker both possible :
+from manager: docker node  update --label-add "key=value" node_id 
+
+docker service create --name web-server -p 80:80 --replica 3 --contraint="node.labels.key==value" nginx
+
+from worker : => vim daemon.json  
+              =copy> {
+                  "labels" :["name=mylabel"]
+                 }
+             => cp daemon.json /etc/docker  
+
+docker service create --name web-server -p 80:80 --replica 3 --contraint="engin.labels.name==value" nginx
+
+
+
+
+
+TUTORIAL AVAILABILITY :
+  
+    docker node update --availability=pause/active/drain node_id
+
+active=> ready to perform task 
+pause => node will keep running but new container will not created on node prevous keep running
+      => used when we know that some node has extra traffic 
+drain => all the previously created container shift to another node
+      => used when wants to do repair operatio to node 
+ 
+
+
+
+ 
+
+
+
+
+
+ 
+
+

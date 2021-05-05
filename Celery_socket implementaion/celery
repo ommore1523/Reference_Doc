@@ -1,0 +1,109 @@
+
+
+##################  config.py 
+
+QUEUE_XML= 'xpxml'
+
+NAMESPACE ='/xpxml'
+
+
+################ app/__init__.py
+
+
+
+redis_uri = f"redis://{app.config['REDIS_HOST']}:{app.config['REDIS_PORT']}/0"
+
+
+
+# initiallize celery
+from celery import Celery
+celeryapp = Celery('xml', broker=redis_uri, backend=redis_uri)
+
+
+
+        
+        
+##################### app/xml_service.py
+
+from  config import QUEUE_XML ,NAMESPACE
+from  . import  celeryapp
+from app.xml_socket import send_socket
+
+class efficientnet_train_api(BaseApi):
+    route_base='/xml'
+    @expose('/put/clsefficientnettrain/',methods=['POST'])
+    @protect()
+    def train_model(self):
+        logger.info_logger("Called efficientnet training module...")
+        try:
+            logger.info_logger("Reading request args")
+            data_list=request.json
+            channel_ui=1
+            modified_by = 1
+            workspace_id = 1
+            user_session_id=1
+            logger.info_logger("Request args read successfully request args")
+        except Exception as e:
+            logger.error_logger("Error at reading Reading request args"+str(e))
+            send_socket('error',0,workspace_id,message="some error occured at server")
+            return self.response(400,message=f"Error at reading params {str(e)}")
+        try:
+            logger.info_logger("Started celery process")
+            celeryapp.send_task('app.xml_algo.efficientnet_train', queue = QUEUE_XML, args=(channel_ui,modified_by,workspace_id,user_session_id,data_list))
+            return self.response(201,message=f"started trainning")
+        except Exception as e:
+            logger.error_logger("error while celery process"+str(e))
+            return self.response(401,message=f"error while initialise celery process ")
+
+
+######################## xml_algo.py
+
+from  . import celeryapp
+from  .config import NAMESPACE
+from app.xml_socket import send_socket
+
+@celeryapp.task()
+def efficientnet_train(channel_ui,modified_by,workspace_id,user_session_id,data_list):
+    try:
+        logger.info_logger("celery ssd_train")
+        send_socket('process',NAMESPACE,workspace_id,message="processing ...")
+        send_socket('process',NAMESPACE,workspace_id,message="Reading parameters values..")
+        logger.info_logger("db object creating in efficientnet training")
+        db_obj=bal_service()
+        logger.info_logger("db object created")
+        logger.info_logger("Reading api parameters value")
+        epochs=data_list['epochs']
+        batch_size=data_list['batch']
+        data_dir=data_list['data_dir']
+        basefile=data_list['basefile']
+        trainsub=data_list['trainsub']
+        model=data_list['selectmodel']
+        dropout_out=data_list['dropout']
+        project_name=data_list['project_name']
+
+        if 'width' not in data_list:
+            width=None
+        else:
+            width=data_list['width']
+        if 'height' not in data_list:
+            height=None
+        else:
+            height=data_list['height']
+        if 'channel' in request.args:
+            channel_ui = int(request.args['channel'])
+        logger.info_logger("All api params read successfully ..")
+    except Exception as e:
+        logger.error_logger("Error in reading request data in efficientnet training.")
+        send_socket('error',NAMESPACE,workspace_id,message="Some Error occured at server level")
+        
+        
+        
+############### command to run celery xml_algo.py
+
+celery --app=app.xml_algo worker --concurrency=2 --max-tasks-per-child=2 -l DEBUG -Q xpxml
+
+
+    
+
+
+

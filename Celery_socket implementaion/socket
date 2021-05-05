@@ -1,0 +1,46 @@
+
+# app/__init__.py
+
+# initialize flask-socketio
+from flask_socketio import SocketIO
+socketio = SocketIO(app, message_queue=redis_uri,cors_allowed_origins="*")
+
+
+################# app/xml_socket.py
+
+
+from flask_socketio import SocketIO
+import config
+
+redis_uri = f'redis://{config.REDIS_HOST}:{config.REDIS_PORT}/0'
+
+# socketio
+sio = SocketIO(message_queue=redis_uri, cors_allowed_origins="*")
+# msg
+EVENT_TYPE = {'message':'msg', 'msg':'msg', "status":"status"}
+
+# ang-event  
+def send_socket(event, namespace, room, message_key="default", message=""):
+    ''' method for publishing messages using celery '''
+    if namespace != 0:
+        print(message)
+        sio.emit(event, {f"{message_key}_msg":message}, namespace=namespace, room=room)
+    else:
+        print(message)
+        
+        
+        
+################ gunicorn socket command
+
+gunicorn --worker-class eventlet --workers 1 --bind 0.0.0.0:9016 run:app --log-level debug
+
+
+# run socket test 
+
+path:
+ 
+ 
+ /home/omkar/Documents/project/socket_test/
+
+
+python3 -m http.server 12000

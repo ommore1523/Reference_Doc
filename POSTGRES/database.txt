@@ -1,0 +1,119 @@
+
+# postgres installation and pgadmin : https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
+    
+defn==>    sql is standard language which helps with interact with databases 
+
+difference ==>
+           sql == relational     nosql=non-relational == distributed 
+           table format          key value and graph 
+           vertically scalable   horizontaly scalable
+           oracle,postgres,msql  mongodb redis cassadra  
+
+check databases list from sql cmdline :
+           show databases
+
+
+create database from cmdline:
+          create database database_name;
+          
+delete database cmdline:
+          drop database db_name
+          
+use db from cmdline:
+         use db_name;
+         
+check current database :
+        select database ();
+        
+create table :
+        create table <table_name> ( column name data_type,column_name datatype) 
+
+dedcribe database info :
+       desc db_name	
+       
+some sql queries:
+ 
+ select * from db_name
+ show warning
+ 
+ 
+
+
+Primary key: uniue id for record like unique number for lice number;
+       after adding unique key it will create one column nameed as 'key' add that row value 'PRI'
+auto increment add 'extra' column with value 'auto_increment'
+
+foreint key gives relation between two or more tables ;
+
+
+create table customer(cid int not null auto_increment primary key ,
+                       cname varchar(55),
+                       email varchar(100) );
+                       
+create table orders (oid int not null auto_increment primary key ,
+                      ordered data ,
+                      cid int,
+                      forein key (cid) ,
+                      refernce customers(cid) );	
+	
+
+#  CRUD 
+
+C=create new table;
+
+R=
+select * from table_name where condition;
+select column1 col2 from table_name where condition;
+select distinct col_name from tb_name ==>get uniqure record
+select age from tb_nmae order by age;
+select distinct age from tb_name order by age ;
+select age from tb_name order by age limit 2;    // show only first two ordered age 
+select name from tb_name where name like  '%me%'  //finding record with some word
+select max(age) from tb_name;
+select min(age) from tb_name;
+select sum(age) from tb_name;
+select count(age) from tb_name;
+select * from tb_name where age between 22 and 25;
+
+U=
+
+update table_name set age=20 where id=1     ==> where condition should have unique value 	    
+
+D=
+
+delete from tb_name where id=1; 
+
+
+
+
+
+
+************************  XML  ********************
+# insert into model
+  insert into in_model 
+  values((select max(model_id)+1 from in_model),1,'XML Detection Model','XML object       detection model',1,CURRENT_TIMESTAMP,'xmdt');
+  
+# delete record 
+  delete from in_model where model_id=14;
+  
+  
+  
+  
+  select * from in_workspace;
+
+select * from in_model;
+insert into in_model 
+values((select max(model_id)+1 from in_model),1,'XML Classification Model','XML Classification Model',1,CURRENT_TIMESTAMP,'xmcl');
+  
+insert into in_workspace (workspace_id,model_id,case_id,workspace_name)
+values ((select max(workspace_id)+1 from in_workspace) , (select max(model_id)+1 from in_workspace) ,1 ,'XML image_classification')
+
+
+
+
+variiable 
+# set vars.batch_id = '82';
+
+# SELECT current_setting('vars.batch_id');
+
+

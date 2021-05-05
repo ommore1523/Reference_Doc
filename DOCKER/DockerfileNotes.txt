@@ -1,0 +1,56 @@
+################  ************** Benefits for docker file *********** ##################### 
+# company can create image as per requirements 
+# Sometimes on container increases load  to scale up we need docker file 
+
+#          docker image build -t <myimagename> .
+#          docker image build -t <myimagename> -f <dockerfilepath> .
+#          -f is also used to give custom file name 
+
+
+# docker image pull ubunut:18.04    -> download base image from hub
+# docker imag histrory <imageid>    -> check what is inside docker file 
+
+
+## Docker Layer Architecture 
+
+first laye : create container and add base image  to container 
+             then create image from container 
+             remove container 
+second layer :  in second layer it takes first layer image and run cmd 
+              then delete that container keeps image 
+
+              and continueous process
+
+FROM <imagename>                   # Base Image Name
+RUN  <Cmd>                         # command line commands  
+LABLE <labelname>                  # add contact if any error occuress then contact here 
+ENV  <env_variable>                # set environmental variable || run container || run 'env' command to check 
+                                   # usecase secret username and passwd : email send stmp python
+USER <username>                    # login as new user not a root 
+WORKDIR <dir>                      # login and navigate to pirticualr dir 
+COPY <filepath> <container_path>   # copy 
+ADD  <filepath> <container_path>   # copy file but if tar file then extract it  
+                                   # if any zip link available like website then copy extracted content
+CMD [<'cmd1'>]                     # create container and run cmd              
+EXPOSE <port_no> expose the port 
+
+
+
+# interview 
+---------------------'    - map p 22<--> 2222(any)  in container 
+'  '----------'      '    - then do ssh with publicip:2222 from local machine
+'  ' docker   '      '
+'  ' container'      '
+'  '----------'      '
+'   ip(172.17.1.2)   '
+'                    '
+---------------------'
+docker host(aws mchine)
+(eth0: 172.17.1.1)
+
+# do one labe download website and host using apache2
+
+### how to change name 'Dockerfile' to any
+
+your filename 'xyz'
+docker image build -t <myimagename> -f xyz  .

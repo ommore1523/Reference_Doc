@@ -1,0 +1,220 @@
+
+
+                       ************* Angular basic commands and steps ******************
+                
+                
+    **** declaration component while lazy loading and loading and writing route in respective component is important ***
+                
+                
+1. Create new project :  ng new project_name
+
+2. create component : ng g c component_name 
+
+3. Show component in root app :
+       
+       [i]   app module imports component in app.module.ts (autmatic by cli)
+       [ii]  component selector add to component html file
+
+4. Create module :
+       [i] ng g m modulename 
+
+5. show to app :
+        [i] export **components** from new_module.module.ts
+        [ii]  import **new_module** in app.module.ts
+        [iii] add component selectors to apps html file
+        
+6. Root level routes :
+
+       [i] component 1
+       [ii] component 2
+       [iii] import components in app-routes
+       [iv]  route [
+                     {  
+                        path:"component 1(exp. user)",
+                        component:Imported_component_name
+                     },
+                     {  
+                        path:"component 1(exp. user)",
+                        component:Imported_component_name
+                     }  
+                        ]
+                        
+        [v]   add anchor tag and ->  routerLink="path"
+        [vi]  add <router-outlet></router-outlet>
+        
+        
+        
+7. Generate module level routing
+       ng g m module_name --routing
+                     
+                     
+8. Lazy loading import module add app-route:
+       {
+       path:'admin' ,loadChilder:()=>import('./admin/admin.module')	
+       .then(mod=>mod.AdminModule)	
+       }
+
+
+9. Generate module and routing inside component 
+      ng g m component/ImgclassificationTest --routing
+      
+      
+      
+10. chunk file transfer 
+
+       https://stackoverflow.com/questions/58258131/how-to-upload-video-files-as-chunks-in-angular-version-8
+
+
+11. md5 checksum for check data similarity 
+
+
+
+9. ng g m sub-folder/module-name --routing
+
+
+10  implementing i18n
+
+
+       # install
+       "@ngx-translate/core": "^13.0.0",
+       "@ngx-translate/http-loader": "^6.0.0",
+
+
+       #====>>>>>> app-module 
+       //i18n 2
+       import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+       import {TranslateModule,TranslateLoader} from '@ngx-translate/core';
+       import { HttpClientModule,HTTP_INTERCEPTORS,HttpClient } from '@angular/common/http';
+
+
+       # add export function above @gnmodule
+       export function HttpLoaderFactory(httpclient:HttpClient){
+       return new TranslateHttpLoader(httpclient);
+       // return new TranslateHttpLoader(httpclient, env['reverse_proxy_prefix']+"/assets/i18n/", ".json");
+       }
+
+       # import 
+
+       TranslateModule.forRoot({
+       loader:{
+       provide:TranslateLoader,
+       useFactory:HttpLoaderFactory,
+       deps:[HttpClient]
+       }
+       })
+
+
+       #====> app.comp.ts
+
+
+       # import service 
+       import { TranslateService } from '@ngx-translate/core';
+
+       # constructor create
+       constructor(public translate: TranslateService) {
+       translate.addLangs(['en', 'fr']);
+       translate.setDefaultLang('en');
+       translate.use('en');
+       // const browserLang =translate.getBrowserLang();
+       const browserLang = 'en';
+       translate.use(browserLang.match(/fr|en/) ? browserLang : 'fr');
+       
+       }
+
+
+
+       # =====> in module componet.ts 
+       import { TranslateService } from '@ngx-translate/core';
+
+       # variable  
+       modelNam
+
+       # contructor 
+       constructor(private translate: TranslateService)
+
+       this.translate.get('objectdetectiontrain').toPromise().then(res => {
+       this.modelName=res
+       })
+
+       Referenc :  https://www.youtube.com/watch?v=oxigDfDfD8Q
+
+# en.json
+
+{
+    "objectdetectiontrain":{
+        "title":"Object Detection Training",
+        "addEditForm":{
+            "trainsub":"Training Subject",
+            "basefilename":"Name to save model file "
+        },
+        "uploadData":{
+            "datasummaryblock":"Uploaded  Data Summary ",
+            "total_image":"Total Images files"
+        },
+        "Modelinfo":{
+            "modelinfotitle":"Model Information",
+            "average_score":"Average Accuracy"
+
+        },
+        "Validation_messages":{
+            "training_sub":{
+                "field_required":"Field is required",
+                "minlength4":"minimum length should be 4 characters"
+            }
+        
+       }
+
+    }
+}
+
+12:  reactive form 
+
+
+
+13. angular cookies
+
+npm install  --save ngx-cookie-service 
+
+    
+import {CookeiService} from 'ngx-cookie-service'
+
+constructor(private cookie:Cookieservice){
+
+<on_click_button_function>() {
+    this.cookie.set("key" ,"value")  
+    this.cookie.get("key")
+    this.cookie.delete("key")
+  }
+
+"""
+different methods present :
+check ,get, get all,set,delete,delete all
+check 
+"""
+}
+
+
+14. sessions:
+
+
+sessions are two types 1. local storage 2. web storage
+
+local storage data will not be delated and available for next day month or year. Accessible only at client side. Avalibale for all pager undeer same domain
+
+component.ts==>
+ngoninit(){
+localStorage.setItem('key','value')
+sessionStorage.setItem('key','value')
+
+console.log(localStorage.getItem("key")
+console.log(sessionStorage.getItem("key")
+
+}
+
+sessionstorage :
+delete data on delete tab.
+
+
+
+ref : https://stackoverflow.com/questions/3220660/local-storage-vs-cookies
+   

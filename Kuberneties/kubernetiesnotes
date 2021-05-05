@@ -1,0 +1,67 @@
+
+
+#         ************  KUBERNETIES  *****************
+
+kubectl run db_server --image=mysql
+
+
+POD:
+1. How many containers created by default when we create pod ?
+2. What will be the ip container inside pod ?
+3. if mycontainer get lost from pod will it create new  or not ?
+4. If i have two nodes and two pods and two containers web and db are deployed inside both pod respectively. how they can    
+   communicate ? 
+5. what is deployment ? why it necessary ?
+6. if pod deletes and recreates will the ip will same ? ->NO 
+7. what is service and why it needed ?	
+8. what are types of service ?   1.clusterip 2.nodeport 3. loadbalancer 
+9. why service ip used to communicate ?
+10 are we need to provide service ip range (cluster_ip)? yes 
+11. when to used service type  clusterip nodeport loadbalancer
+12. advantages of deploying web and db in same pod?
+13. which type of storage used to store data ?
+
+KUBERNET CLUSTURE CONF :
+1. on premises
+2. cloud aws/azure/google
+3. VM	
+4. Plateform as service 
+
+
+
+
+
+##### minicube
+
+it is single node cluster 1node=mastenode+workernode(both same)
+https://v1-18.docs.kubernetes.io/docs/tasks/tools/install-minikube/
+
+1. to install minicube on windows which hyperviser supports ? hyperv,oracle virtualbox
+
+
+2. to install minicube on linux which hypervisor supports ? kvm , virtualbox 
+3. can we do setup of minicube without hyperviser ?
+	
+## kubeadm
+
+ref : https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+multi node cluster (multiple worker and master node separaty)
+
+requirements :
+master node should be min 2 gb ram and 2 cpu 20gb hardisk
+worker node 2gb 1 cpu  20gb hdd
+swap memory should be off --> bcz kuberneties not allow you to store runtime data in swap .. only allow in save in ram
+should install docker ,kubeadm,kubelet,kubectl install
+docker -> for container creation
+kubeadm ->cluster setup
+kubectl --> cluster component management,
+kubectl --> command line
+
+
+systemctl status firewall -> check firewall status
+
+interview: ports used by which service 
+
+kya kubernet ke component os ke upar chalte hai ya pod -> pod ke upar
+	
+

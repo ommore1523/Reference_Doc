@@ -1,0 +1,267 @@
+
+
+
+#######################################################  xml_crud_del_setting ###############################################################################################
+ 
+CREATE OR REPLACE FUNCTION public.xml_crud_del_setting(
+	VARIADIC bdata integer[])
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare
+status varchar;
+i_max integer:=array_length(bdata,1);
+begin
+for i in 1..i_max loop
+delete from in_workspace_setting where app_setting_id =  bdata[i];
+
+end loop;
+
+status:='deleted';
+return status;
+exception when others then
+GET STACKED DIAGNOSTICS status =PG_EXCEPTION_DETAIL;
+return status;
+end;
+$BODY$;
+
+
+############################################### xml_crud_get_alluser ###############################################################################################################
+
+CREATE OR REPLACE FUNCTION public.xml_crud_get_alluser(
+	)
+    RETURNS TABLE(id integer, first_name character varying, last_name character varying, username character varying, password character varying, active boolean, email character varying, last_login timestamp without time zone, login_count integer, changed_on timestamp without time zone, changed_by_fk integer) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+begin
+return query select
+abu.id,
+abu.first_name,
+abu.last_name,
+abu.username,
+abu.password,
+abu.active,
+abu.email,
+abu.last_login,
+abu.login_count,
+abu.changed_on,
+abu.changed_by_fk
+from ab_user abu;
+
+end;
+$BODY$;
+
+
+
+############################################## xml_crud_get_settings #################################################################################################################
+
+CREATE OR REPLACE FUNCTION public.xml_crud_get_settings(
+	wid integer)
+    RETURNS TABLE(app_setting_id bigint, setting_id character varying, setting_number bigint, setting_type_id integer, setting_value character varying, setting_value_type character varying, setting_description character varying, advanced_flag boolean, modified_by integer, modified_time timestamp without time zone, app_module character varying) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+begin
+return query select
+iws.app_setting_id,
+iws.setting_id,
+iws.setting_number,
+iws.setting_type_id,
+iws.setting_value,
+iws.setting_value_type,
+iws.setting_description,
+iws.advanced_flag,
+iws.modified_by,
+iws.modified_time,
+iws.app_module
+from in_workspace_setting iws
+where
+iws.workspace_id=wid and
+iws.app_module='xmcl' or iws.app_module='xmdt';
+end;
+$BODY$;
+
+####################################################### xml_crud_get_sysolversessionlog ################################################################################################
+
+CREATE OR REPLACE FUNCTION public.xml_crud_get_sysolversessionlog(
+	wid integer)
+    RETURNS TABLE(slover_session_id bigint, solver_used character varying, user_session_id integer, user_id integer, trigger_start_time timestamp without time zone, solver_run_completion_time timestamp without time zone, success_flag boolean, objective_value double precision, mip_gap double precision, solve_time double precision, iteration_count integer, application_id integer, workspace_id integer, app_module character varying, classes text, train_acc text, val_acc text, train_loss text, val_loss text, no_of_epochs text, batch text, trainsub text, pred_result text, save_model_name text, avg_pred_acc text) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+begin
+
+return query select
+
+sssl.slover_session_id,
+sssl.solver_used,
+sssl.user_session_id,
+sssl.user_id,
+sssl.trigger_start_time,
+sssl.solver_run_completion_time,
+sssl.success_flag,
+sssl.objective_value,
+sssl.mip_gap,
+sssl.solve_time,
+sssl.iteration_count,
+sssl.application_id,
+sssl.workspace_id,
+sssl.app_module,
+
+cast(sssl.general_attributes->>'classes' as text ) as classes,
+cast(sssl.general_attributes->>'train_acc' as  text ) as train_acc,
+cast(sssl.general_attributes->>'val_acc' as  text ) as val_acc,
+cast(sssl.general_attributes->>'train_loss' as  text ) as train_loss,
+cast(sssl.general_attributes->>'val_loss' as  text ) as val_loss,
+cast(sssl.general_attributes->>'no_of_epochs' as text ) as no_of_epochs,
+cast(sssl.general_attributes->>'batch' as text ) as batch,
+cast(sssl.general_attributes->>'trainsub' as text ) as trainsub,
+cast(sssl.general_attributes->>'pred_result' as text ) as pred_result,  
+cast(sssl.general_attributes->>'save_model_name' as text) as save_model_name,
+cast(sssl.general_attributes->>'avg_pred_acc' as text) as avg_pred_acc
+
+from sy_solver_session_log sssl where sssl.workspace_id=wid;
+
+end;
+$BODY$;
+
+############################################################### xml_crud_put_outkpivalue ###################################################################################################
+
+
+CREATE OR REPLACE FUNCTION public.xml_crud_put_outkpivalue(
+	channel integer,
+	stg_table character varying)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare status text;
+begin
+insert into out_kpi_value (workspace_id,kpi_id,kpi_instance_id,kpi_value,network_id,uom_id,modified_by,modified_time)
+select d.workspace_id,d.kpi_id,d.kpi_instance_id,d.kpi_value,d.network_id,d.uom_id,d.modified_by,d.modified_time from z_select(stg_table) 
+as d (workspace_id integer,kpi_id integer,kpi_instance_id bigint,kpi_value double precision,network_id integer,uom_id integer,modified_by integer,modified_time timestamp without time zone);
+status = 'saved';
+return status;
+exception when others then
+Get STACKED DIAGNOSTICS
+status = PG_EXCEPTION_DETAIL;
+end;
+$BODY$;
+
+#################################################### xml_crud_put_setting ################################################################################################################
+
+
+CREATE OR REPLACE FUNCTION public.xml_crud_put_setting(
+	channel integer,
+	stg_table character varying)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare status text;
+begin  if channel=1 then execute 
+'insert into in_workspace_setting (workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module)
+select workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module from '|| stg_table ||' where app_setting_id=0';
+execute 'update in_workspace_setting as ttbl set
+setting_id = ftbl.setting_id,
+setting_number = ftbl.setting_number,
+setting_type_id = ftbl.setting_type_id,
+setting_value = ftbl.setting_value,
+setting_value_type = ftbl.setting_value_type,
+setting_description = ftbl.setting_description,
+advanced_flag = ftbl.advanced_flag,
+modified_by = ftbl.modified_by,
+modified_time = ftbl.modified_time,
+app_module = ftbl.app_module
+from '||stg_table|| ' as ftbl where ftbl.app_setting_id= ttbl.app_setting_id'; 
+status = 'saved';
+return status;
+elseif channel=2 then execute
+'insert into in_workspace_setting( workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module) select workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module from  '||stg_table||'  on conflict (workspace_id,setting_id,setting_number,app_module) do update set 
+setting_value= excluded.setting_value,
+setting_value_type= excluded.setting_value_type,
+setting_description= excluded.setting_description,
+advanced_flag= excluded.advanced_flag,
+modified_by= excluded.modified_by,
+modified_time= excluded.modified_time,
+app_module= excluded.app_module';
+status = 'saved';
+return status;
+end if;
+exception when others then
+GET STACKED DIAGNOSTICS status = PG_EXCEPTION_DETAIL;
+return status;
+end;
+$BODY$;
+
+############################################# xml_crud_put_sysolversessionlog  ##################################################################################################################
+
+CREATE OR REPLACE FUNCTION public.xml_crud_put_sysolversessionlog(
+	channel integer,
+	stg_table character varying)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare status text;
+begin execute 
+'insert into sy_solver_session_log (solver_used,user_session_id,user_id,trigger_start_time , solver_run_completion_time , success_flag,objective_value, mip_gap,solve_time,iteration_count,application_id,workspace_id,app_module,general_attributes)
+select solver_used,user_session_id,user_id,trigger_start_time , solver_run_completion_time ,  success_flag,objective_value , mip_gap,solve_time,iteration_count,application_id ,workspace_id,app_module, general_attributes from '||stg_table||' where slover_session_id=0' ;
+status = 'saved';
+return status;
+
+exception when others then
+GET STACKED DIAGNOSTICS status = PG_EXCEPTION_DETAIL;
+return status;
+end;
+$BODY$;
+
+#################################################################################################################################################################################################
+#################################################################################################################################################################################################
+
+
+*** adding application to ui ***
+
+ab_user 
+in_model
+sy_user_model_right
+sy_application
+
+
+*******  Change data type ****
+
+ALTER TABLE sy_solver_session_log
+ALTER COLUMN log_details  TYPE jsonb
+USING log_details::jsonb;
+
+
+**** Rename to log_details ***********
+
+ALTER TABLE sy_solver_session_log 
+RENAME log_details TO general_attributes;
+
+
+################################################################################################################################################################################################
+################################################################################################################################################################################################
+
+
+
+
+
+
+
