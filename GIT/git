@@ -1,0 +1,32 @@
+echo "# Reference_doc" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/ommore1523/Reference_doc.git
+git push -u origin main
+
+ -hosts: all                                                              
+  tasks:                                                                   
+    - apt:                                                                
+          name: httpd                                                   
+          state: latest                                                  
+    - copy:                                                               
+          src: /consulting-website-template/                               
+          dest: /var/www/html/                                             
+                                                                           
+    - lineinfile:                                                         
+          path: /etc/httpd/conf/httpd.conf                                 
+          insertafter: "^#Listen "                                         
+          regexp: "^Listen"                                                
+          line: "Listen 8080"                                              
+                                                                           
+    - firewalld:                                                           
+          immediate: true                                                  
+          permanent: true                                                 
+          port: 8081/tcp                                                  
+          state: enabled                                                  
+                                                                          
+    - service:                                                             
+           name: httpd                                                     
+           state: started 	
