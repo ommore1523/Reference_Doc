@@ -2,93 +2,212 @@
 # ************* Chunk file upload using angular 10 and flask application ***************************
 
 
-#  Python code :
+#####################################################################################################
+                                     Python code
+#####################################################################################################
 
-            ALLOWED_EXTENSIONS = {'zip', 'jpg', 'jpeg', 'png', 'gz', 'tar', 'iso', 'rpm', 'deb', 'pdf'}
+    config declaration => ALLOWED_EXTENSIONS = {'csv', 'xslx'}
+            
+    #---------------------------------------------------------
+    #     Get status File Api
+    #---------------------------------------------------------
+    @expose('/filestatus' , methods=['POST'])
+    def getFilestatus(self):
+        # read file data
+        workspaceID = request.json['wokspaceId']
+        modelName = request.json['modelName']
+        fileName = request.json['fileName']
 
+        # create models directory structure
+        if not os.path.exists(config.UPLOAD_FOLDER+'/'+modelName):
+            os.mkdir(config.UPLOAD_FOLDER+'/'+modelName)
+            os.mkdir(config.UPLOAD_FOLDER+'/'+modelName+'/workspace'+str(workspaceID))
+        else:
+            if not os.path.exists(config.UPLOAD_FOLDER+'/'+modelName+'/workspace'+str(workspaceID)):
+                os.mkdir(config.UPLOAD_FOLDER+'/'+modelName+'/workspace'+str(workspaceID))
 
-            class Get_status(BaseApi):
-                route_base=""
-                @expose('/getstatus')
-                @rison()
-                def greeting(self,**kwargs):
-                    # import pathlib module 
-                    from pathlib import Path
-                    # Read filename from input
-                    filename = kwargs['rison']['filename']
+        # check file status
+        filePath = Path(config.UPLOAD_FOLDER+'/'+modelName+'/workspace'+str(workspaceID)+'/'+fileName)
+        fileSize = 0
+        if filePath.is_file():
+            fileSize = filePath.stat().st_size
+        fileStatus={"fileName":fileName,"fileSize":fileSize}
 
-                    # construct path object
-                    file_ctx = Path(filename)
-                    # check is file exists
-                    filesize = 0
-                    if file_ctx.is_file():
-                        filesize = file_ctx.stat().st_size
-                        uploaded_file_size = filesize
-                    result={"filename":filename,"filesize":filesize}
-                    
-                    return self.response(200 , result=result )
-            appbuilder.add_api(Get_status)
-
-
-            class UploadApi(BaseApi):
-
-                def allowed_file(self, filename: str) -> bool:
-                    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
-
-                # upload data function 
-                route_base=""
-                @expose('/upload', methods=['POST', 'GET'])
-                def upload_data(self):
-                    if request.method == 'POST':
-                        files = request.files 
-                        if type(files['client_files']) is FileStorage:
-                            value = files['client_files']
-                        else:
-                            key = files.keys()[0]
-                            value = files[key]
-                        filename = secure_filename(request.form['file_name'])
-                        offset=request.form['offset']
-                        print("\n"+str(offset)+"\n")
-                        if not self.allowed_file(filename):
-                            return jsonify({"message": "please upload only zip files"})
-                        with open(filename, 'ab') as f:
-                            f.seek(int(offset))
-                            f.write(value.stream.read())
-                        return self.response(201, message="File Written successfully")
-                    return self.response(200, message="GET REQUEST")
-            appbuilder.add_api(UploadApi)
+        return self.response(201 , result=fileStatus )
 
 
 
-# angular code :
+    #---------------------------------------------------------
+    #     Upload File Api
+    #---------------------------------------------------------
+    # check file is allowd to upload
+    def allowed_file(self, filename: str) -> bool:
+        return '.' in filename and filename.rsplit('.',1)[1].lower() in config.ALLOWED_EXTENSIONS
 
-  ### component.html 
+    @expose('/upload' , methods=['POST'])
+    def upload(self):
+        files = request.files
+        # check if the file type is FileStorage 
+        if type(files['client_files']) is FileStorage:
+            value = files['client_files']
+        else:
+            key = files.keys()[0]
+            value = files[key]
+
+        # read filename from stream data 
+        filename = secure_filename(request.form['file_name'])
+
+        # get bytes write start point 
+        offset=request.form['offset']
+        workspaceID = request.form['workspace_id']
+        modelName=request.form['modelName']
+
+
+        # check if the upload file type 
+        if not self.allowed_file(filename):
+            self.response(400 ,message=f"ERROR")
+
+        with open(config.UPLOAD_FOLDER+'/'+modelName+'/workspace'+str(workspaceID)+'/'+filename , 'ab') as f:
+            f.seek(int(offset))
+            f.write(value.stream.read())
+
+        return self.response(201, result=filename)
+
+
+
+
+
+
+######################################################################################################
+                             html code 
+######################################################################################################
+
+css->
+:host ::ng-deep .custom-progress .p-progressbar{
+    height: 16px;
+   
+}
+
+:host ::ng-deep .p-progressbar-label{
+    line-height: 15px;
+}
+
+
+
+html -->
+
+    <div class="upload p-mt-4">
+        <p-fileUpload name="myfile[]" customUpload="true" accept=".csv" (onClear)="CancelFileUpload()" (onSelect)="OnSelectFile($event)" (uploadHandler)="OnFileUpload($event)" ></p-fileUpload>
+        <p-toast position="top-center" key="file_upload_key"></p-toast>
+        <div *ngIf="uploadProgressBar" >
+            <p-progressBar class="custom-progress" [value]="uploadPercentage"></p-progressBar>
+        </div>
+        <p-toast position="top-center" key="uploadSuccess"></p-toast>
+    </div>
 
              
 
- ### component.ts 
+ #####################################################################################################
+                             component.ts 
+ ##################################################################################################
+  
+  // Variables declaration
+  uploadPercentage = 0;
+  preUploadedFileSize = 0;
+  uploadSuccessfully = false;
+  cancelUpload = false;
+  uploadProgressBar = false;
         
-        // Run as file selected 
-        onSelectfile(event){
-            this.getstatus_api=this.baseUrl+"getstatus?q=(filename:"+event.currentFiles[0].name+")"
-            const status=this.apiService.get_status(this.getstatus_api).subscribe(res=>{
-            this.previous_filesize = res['result']['filesize']
-            })
-        }
-        
+     /* -----------------------------------------------------------------------------------
+                          File Upload 
+      ---------------------------------------------------------------------------------*/
+    
+    OnSelectFile(event){
+          let currentFileName = event.currentFiles[0].name
+          // if some chunks uploaded that size  else 0 
+          let currentFileSize = event.currentFiles[0].size
+          // set " <filename>_size_<filesize> "
+          sessionStorage.setItem("file_name", (currentFileName).split('.')[0]+'_size_'+(currentFileSize).toString()+"."+(currentFileName).split('.')[1]);
+          this.uploadPercentage=0
+          this.uploadSuccessfully=false
+          this.cancelUpload=false;
+          this.uploadProgressBar=false
 
+          let postData = {
+            "fileName":(currentFileName).split('.')[0]+'_size_'+(currentFileSize).toString()+"."+(currentFileName).split('.')[1],
+            "modelName":sessionStorage.getItem('model_name').replace(/\s+/g, ""),
+            "wokspaceId":sessionStorage.getItem('workspace_id'),
+          }
 
-        // run after file upload click 
-        async onuploadfile(event) {
-            let import_file = event.files[0];
-            const chunkSize = 10000000;
-            for( let offset = 0; offset < event.files[0].size; offset += chunkSize ){
-                const chunk = event.files[0].slice( offset, offset + chunkSize );
-                const apiResponse = await  this.apiService.sendChunk(chunk, offset ,import_file.name).toPromise().then(
-                    res=>{}
-                );
+          const fileStatus = this.fileUploadService.getFileStatus(env.rest_api_url+"nlp/filestatus",postData).subscribe( response =>{
+            console.log("File status",response['result'].fileSize)
+            this.preUploadedFileSize = response['result'].fileSize
+            if (currentFileSize==this.preUploadedFileSize){
+              this.messageService.add({key: 'file_upload_key', severity:'error', summary: 'File Upload ', detail: 'File already exists....'})
             }
+          },
+          error => {
+            console.log("error",error)
+          }
+            
+          )
         }
+
+
+    // cancel uploading file 
+    CancelFileUpload(){
+      this.uploadProgressBar=false;
+      console.log("cacel")
+      this.cancelUpload=true;
+    }
+
+
+    async OnFileUpload(event){
+      let currentFile = event.files[0]
+      const fileName =  sessionStorage.getItem('file_name')
+      const chunkSize = 10000000;
+      const modelName = sessionStorage.getItem('model_name').replace(/\s+/g, "");
+
+      let NumOfChunks =  (currentFile.size/chunkSize)
+        if (NumOfChunks<1){
+          NumOfChunks=1
+        }
+        else{
+          NumOfChunks = Math.trunc(NumOfChunks) + 1
+        }
+
+      let chunkSent = (this.preUploadedFileSize/chunkSize)
+      this.uploadProgressBar = true
+
+      for( let offset = this.preUploadedFileSize; offset < currentFile.size; offset += chunkSize ){
+        
+        const chunk = currentFile.slice( offset, offset + chunkSize );
+        if(this.cancelUpload==true)
+        break
+        const apiResponse = await  this.fileUploadService.sendChunk(chunk, offset ,fileName,modelName).toPromise().then(
+          res=>{
+            console.log(res)
+            // set progress bar value for data sent in percentage 
+            chunkSent+=1
+            this.uploadPercentage=Math.round((100*chunkSent)/NumOfChunks);
+          });
+
+          if (this.uploadPercentage==100){
+            setTimeout(() => {    this.messageService.add({key: 'uploadSuccess', severity:'success', summary: 'File Upload', detail: 'File Uploaded Successfully..'}); }, 2000);
+            }
+      }
+
+    }
+
+
+
+
+
+
+
+    /* -----------------------------------------------------------------------------------
+                          File Upload Implementation Ends Here
+      ---------------------------------------------------------------------------------*/
 
 
  ### environment.ts 
@@ -98,25 +217,28 @@
         rest_api_url:'http://127.0.0.1:5000/'
         };
 
+
+
 ### fileupload.service.ts 
 
-        baseUrl = environment.rest_api_url;
-        
+  baseUrl = env.rest_api_url;
+  
+  constructor( private http:HttpClient,
+    private storageService: StorageService) { }
 
-        constructor( private http:HttpClient) { }
+  
+    getFileStatus(rest_api,postData){
+    return this.http.post(rest_api ,postData )
+  }
 
-        get_status(api){
-            const status_api=api;
-            return this.http.get(status_api)
-        }
-
-
-        sendChunk(chunk,offset, fileName) {
-            console.log(chunk)
-            const APIurl = this.baseUrl+'upload';
-            let formData = new FormData();
-            formData.append('client_files', chunk);
-            formData.append('offset', offset);
-            formData.append('file_name', fileName);
-            console.log(typeof(formData))
-        return  this.http.post(APIurl, formData);
+  
+  sendChunk(chunk, offset ,fileName,modelName ) {
+    const APIurl = this.baseUrl+'nlp/upload';
+    let formData = new FormData();
+    formData.append('client_files', chunk);
+    formData.append('offset', offset);
+    formData.append('file_name', fileName);
+    formData.append('modelName', modelName);
+    formData.append('workspace_id', this.storageService.getItem('workspace_id'));
+   return  this.http.post(APIurl, formData);
+ }

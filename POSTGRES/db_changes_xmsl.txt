@@ -1,9 +1,22 @@
 
-*** adding application to ui 
-ab_user 
-in_model
-sy_user_model_right
-sy_application
+*** adding application and wokpsace to ui
+ab_user   --> adds user 
+in_model  --> adds the new model (register that caf can access)
+
+insert into in_model(,1,'XML Detection Model','XML object detection model',1,'2021-05-07 11:00:00','xmdt')
+insert into in_model(,1,'XML Classification Model','XML Classification Model',1,'2021-05-07 11:00:00','xmcl')
+
+sy_user_model_right --> models adds
+
+
+** adds workspace 
+
+insert into in_workspace (workspace_id,model_id,case_id,workspace_name)
+values ((select max(workspace_id)+1 from in_workspace) , (select max(model_id)+1 from in_workspace) ,1 ,'XML image_classification')
+insert into in_workspace (workspace_id,model_id,case_id,workspace_name)
+values ((select max(workspace_id)+1 from in_workspace) , (select max(model_id)+1 from in_workspace) ,1 ,'XML object_detection')
+
+sy_application  --> insert machine learning model 
 
 #########################################################################################################
 

@@ -1,0 +1,122 @@
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                 Create Table
+# -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________
+
+The standard names for indexes in PostgreSQL are:
+
+{tablename}_{columnname(s)}_{suffix}
+
+where the suffix is one of the following:
+
+    pkey for a Primary Key constraint
+    key for a Unique constraint
+    excl for an Exclusion constraint
+    idx for any other kind of index
+    fkey for a Foreign key
+    check for a Check constraint
+
+Standard suffix for sequences is
+
+    seq for all sequences
+
+Proof of your UNIQUE-constraint:
+
+    NOTICE: CREATE TABLE / UNIQUE will create implicit index "example_a_b_key" for table "example"
+
+____________________________________________________________________________________________________________________
+____________________________________________________________________________________________________________________
+
+
+
+
+
+Create Table Customers(
+    id NOT NULL,
+    name VARCHAR(20),
+    age INT NOT NULL,
+    address CHAR(100),
+    salary DECIMAL(18,2) 
+    PRIMARY KEY (id)
+)
+
+
+#  If CUSTOMERS table has already been created, then to add a NOT NULL constraint to SALARY column
+
+ALTER TABLE customers
+ALTER COLUMN salary set NOT NULL
+
+create table customers(
+id int not null,
+name varchar(10) UNIQUE,
+age int not null,
+address char(100),
+salary decimal(18,2),
+primary key(id)
+)
+
+
+#  set null constraint 
+alter table customers 
+alter column name set not null
+
+
+# set dafault constraint
+alter table customers 
+alter column age set default 10
+
+
+# drop constraint default
+alter table customers 
+alter column age drop default
+
+
+
+# Add unique constraint to existing table column
+alter table customers 
+add constraint customer_age_key  UNIQUE (age);
+
+# remove constraint from table
+alter table customers drop constraint customer_age_key
+
+# remove primary key constrain
+alter table customers drop constraint customers_pkey;
+
+
+# add primary key to existing table
+alter table customers
+add constraint customers_pkey primary key(id)
+
+
+# defining foreign key 
+
+create table customers(
+ customer_id int ,
+ customer_name varchar(10),
+ primary key(customer_id)
+)
+
+ create table contact (
+   contact_id int,
+   customer_name varchar(10),
+   customer_id int,
+   email varchar(100),
+   primary key(contact_id),
+   constraint customer_fkey
+ 	foreign key(customer_id)
+ 	  references customers(customer_id)
+ 	     on delete set null
+ )
+
+
+ # Add foreign key to existing table
+    alter table contact
+    add constraint contact_fkey foreign key(customer_id) references customers(customer_id) on delete cascade
+
+# Delete already exist foreign key 
+    alter table contact
+    drop constraint contact_fkey

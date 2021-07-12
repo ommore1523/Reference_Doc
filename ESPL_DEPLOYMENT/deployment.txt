@@ -1,0 +1,42 @@
+
+
+######################################################################################
+
+
+ 178 :
+ 
+ 
+   1. Docker related stuff 
+   2. 8GB ram 
+   3. Login with sanjeev kumar 
+   4. Solver and xmlservice
+   5. Deployed things:
+          1. xpnp 
+          2. celery
+          3. redis
+          4. espldb
+          5. nifi server
+      
+175 :
+
+
+   1. UI APP 
+   2. xml_service apps
+   3. nginx configured
+   
+   
+###########################################################################################
+
+
+# **** 175 for UI apps ***********
+
+Documents/project_for_deployment/ui_apps  ( ------> All ui projects are available here )
+
+Location for deployment for ui apps :
+
+     ==> /var/www/cafapp/html/   (all ui deployed apps)
+
+
+
+
+

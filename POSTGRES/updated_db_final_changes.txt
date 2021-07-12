@@ -259,6 +259,63 @@ RENAME log_details TO general_attributes;
 ################################################################################################################################################################################################
 ################################################################################################################################################################################################
 
+ALTER TABLE in_workspace_setting
+DROP CONSTRAINT app_module_check;
+ALTER TABLE in_workspace_setting
+ADD CONSTRAINT app_module_check CHECK (app_module::text = ANY (ARRAY['xpnp'::character varying::text, 'xpsa'::character varying::text, 'xsfc'::character varying::text, 'xmcv'::character varying::text, 'cxod'::character varying::text, 'xmdt'::character varying::text, 'xmcl'::character varying::text]))
+
+##################################################################################################################################################################################################
+
+
+
+
+
+
+
+
+**************************************************************************************************************************************************************************************
+                                          VERSION 2
+*****************************************************************************************************************************************************************************************
+
+
+CREATE OR REPLACE FUNCTION public.xml_crud_get_settings(
+	wid integer)
+    RETURNS TABLE(app_setting_id bigint, setting_id character varying, setting_number bigint, setting_type_id integer, setting_value character varying, setting_value_type character varying, setting_description character varying, advanced_flag boolean, modified_by integer, modified_time timestamp without time zone, app_module character varying) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+begin
+return query select
+iws.app_setting_id,
+iws.setting_id,
+iws.setting_number,
+iws.setting_type_id,
+iws.setting_value,
+iws.setting_value_type,
+iws.setting_description,
+iws.advanced_flag,
+iws.modified_by,
+iws.modified_time,
+iws.app_module
+from in_workspace_setting iws
+where
+iws.workspace_id=wid ;
+end;
+$BODY$;
+
+
+
+###################################################
+
+
+
+
+
+
+
 
 
 
