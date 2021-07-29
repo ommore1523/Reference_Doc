@@ -18,6 +18,8 @@ values ((select max(workspace_id)+1 from in_workspace) , (select max(model_id)+1
 
 sy_application  --> insert machine learning model 
 
+
+
 #########################################################################################################
 
 CREATE OR REPLACE FUNCTION public.xml_crud_put_setting(
@@ -318,8 +320,6 @@ end;
 $BODY$;
 
 ###################################################################################################
-
-
 
 
 

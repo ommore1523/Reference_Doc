@@ -1,0 +1,440 @@
+
+                            ##################################################
+                                             XMSA 
+                            ##################################################
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmsa_sentiment_test_viewt', 'xmsa') on conflict do nothing;
+
+
+-- insert into ab_permission (name, app_module) values ('xmsa_csv_upload', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_integrate_api', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_select_model', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_run_sentiment', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_change_setting', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_show_logs', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_show_visulisation', 'xmsa') on conflict do nothing;
+
+
+
+
+-- select * from ab_view_menu where name = 'xmsa_sentiment_test'
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_csv_upload' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+
+--  insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_integrate_api' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_select_model' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_change_setting' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_run_sentiment' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_show_logs' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_show_visulisation' and v.name = 'xmsa_sentiment_test_view' on conflict do nothing;
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmsa_setting_view', 'xmsa') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmsa_get', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_addupdate', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_delete', 'xmsa') on conflict do nothing;
+
+
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_get' and v.name = 'xmsa_setting_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_addupdate' and v.name = 'xmsa_setting_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_delete' and v.name = 'xmsa_setting_view' on conflict do nothing;
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmsa_import_export_view', 'xmsa') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmsa_import', 'xmsa') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmsa_export', 'xmsa') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_import' and v.name = 'xmsa_import_export_view' on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_export' and v.name = 'xmsa_import_export_view' on conflict do nothing;
+
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmsa_integeration_view', 'xmsa') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmsa_integrate', 'xmsa') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmsa_import' and v.name = 'xmsa_integeration_view' on conflict do nothing;
+
+
+
+
+
+
+
+
+
+*********************************************************************************************************************************************************************************************************
+*********************************************************************************************************************************************************************************************************
+*********************************************************************************************************************************************************************************************************
+
+
+-- ################## XMCL TRAIN  VIEW #############################
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_train_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_file_upload', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_change_setting', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_start_train', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_show_logs', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_show_history', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_file_upload' and v.name = 'xmcl_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_change_setting' and v.name = 'xmcl_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_start_train' and v.name = 'xmcl_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_logs' and v.name = 'xmcl_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_history' and v.name = 'xmcl_train_view' on conflict do nothing;
+
+
+-- ################## XMCL TEST  VIEW #############################
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_test_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_select_model', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_upload_data', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_start_test', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_show_output', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_show_history',  'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_show_data_summary',  'xmcl') on conflict do nothing;
+
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_select_model' and v.name = 'xmcl_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_upload_data' and v.name = 'xmcl_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_start_test' and v.name = 'xmcl_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_output' and v.name = 'xmcl_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_history' and v.name = 'xmcl_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_data_summary' and v.name = 'xmcl_test_view' on conflict do nothing;
+
+
+
+
+
+## tabs views
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_setting_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_show_setting', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xcl_get', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_addupdate', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_delete', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_show_setting' and v.name = 'xmcl_setting_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_get' and v.name = 'xmcl_setting_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_addupdate' and v.name = 'xmcl_setting_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_delete' and v.name = 'xmcl_setting_view' on conflict do nothing;
+
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_import_export_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_import', 'xmcl') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmcl_export', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_import' and v.name = 'xmcl_import_export_view' on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_export' and v.name = 'xmcl_import_export_view' on conflict do nothing;
+
+
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_integeration_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_integrate', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_import' and v.name = 'xmcl_integeration_view' on conflict do nothing;
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_case_comparison_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_case_comparison', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_case_comparison' and v.name = 'xmcl_case_comparison_view' on conflict do nothing;
+
+
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmcl_runlogs_view', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmcl_runlogs', 'xmcl') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmcl_runlogs' and v.name = 'xmcl_runlogs_view' on conflict do nothing;
+
+
+
+
+
+
+
+
+
+
+
+
+********************************************************************************************************************************************************************************************************
+******************************************************************************************************************************************************************************************************** *******************************************************************************************************************************************************************************************************
+
+                ###############
+                 XMDT TRAIN
+
+-- insert into ab_view_menu (name, app_module) values ('xmdt_train_view', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_file_upload', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_change_setting', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_start_train', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_logs', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_history', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_data_summary',  'xmdt') on conflict do nothing;
+
+
+
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_file_upload' and v.name = 'xmdt_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_change_setting' and v.name = 'xmdt_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_start_train' and v.name = 'xmdt_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_logs' and v.name = 'xmdt_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_history' and v.name = 'xmdt_train_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_data_summary' and v.name = 'xmdt_train_view' on conflict do nothing;
+
+
+
+
+
+
+         ################
+         XMDT TEST
+
+         
+-- insert into ab_view_menu (name, app_module) values  ('xmdt_test_view',    'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_select_model', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_upload_data',  'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_start_test',   'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_output',  'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_history',  'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_show_data_summary',  'xmdt') on conflict do nothing;
+
+
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_select_model' and v.name = 'xmdt_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_upload_data' and v.name =  'xmdt_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_start_test' and v.name =   'xmdt_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_output' and v.name =  'xmdt_test_view' on conflict do nothing;
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_history' and v.name =  'xmdt_test_view' on conflict do nothing;
+--  insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_data_summary' and v.name =  'xmdt_test_view' on conflict do nothing;
+
+
+
+
+TABS
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmdt_setting_view', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_show_setting', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_show_setting' and v.name = 'xmdt_setting_view' on conflict do nothing;
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmdt_import_export_view', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_import', 'xmdt') on conflict do nothing;
+-- insert into ab_permission (name, app_module) values ('xmdt_export', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_import' and v.name = 'xmdt_import_export_view' on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_export' and v.name = 'xmdt_import_export_view' on conflict do nothing;
+
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmdt_integeration_view', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_integrate', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_import' and v.name = 'xmdt_integeration_view' on conflict do nothing;
+
+
+
+
+--  insert into ab_view_menu (name, app_module) values ('xmdt_case_comparison_view', 'xmdt') on conflict do nothing;
+
+--  insert into ab_permission (name, app_module) values ('xmdt_case_comparison', 'xmdt') on conflict do nothing;
+
+--  insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_case_comparison' and v.name = 'xmdt_case_comparison_view' on conflict do nothing;
+
+
+
+-- insert into ab_view_menu (name, app_module) values ('xmdt_runlogs_view', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission (name, app_module) values ('xmdt_runlogs', 'xmdt') on conflict do nothing;
+
+-- insert into ab_permission_view (permission_id, view_menu_id) select p.id, v.id from ab_permission as p, ab_view_menu as v where p.name = 'xmdt_runlogs' and v.name = 'xmdt_runlogs_view' on conflict do nothing;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*******************************************************************************************************************************************************************************
+*******************************************************************************************************************************************************************************
+
+
+CREATE OR REPLACE FUNCTION public.xmsa_crud_put_setting(
+	channel integer,
+	stg_table character varying)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare status text;
+begin  if channel=1 then execute 
+'insert into in_workspace_setting (workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module)
+select workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module from '|| stg_table ||' where app_setting_id=0';
+execute 'update in_workspace_setting as ttbl set
+setting_id = ftbl.setting_id,
+setting_number = ftbl.setting_number,
+setting_type_id = ftbl.setting_type_id,
+setting_value = ftbl.setting_value,
+setting_value_type = ftbl.setting_value_type,
+setting_description = ftbl.setting_description,
+advanced_flag = ftbl.advanced_flag,
+modified_by = ftbl.modified_by,
+modified_time = ftbl.modified_time,
+app_module = ftbl.app_module
+from '||stg_table|| ' as ftbl where ftbl.app_setting_id= ttbl.app_setting_id'; 
+status = 'saved';
+return status;
+elseif channel=2 then execute
+'insert into in_workspace_setting( workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module) select workspace_id,setting_id,setting_number,setting_type_id,setting_value,setting_value_type,setting_description,advanced_flag,modified_by,modified_time,app_module from  '||stg_table||'  on conflict (workspace_id,setting_id,setting_number,app_module) do update set 
+setting_value= excluded.setting_value,
+setting_value_type= excluded.setting_value_type,
+setting_description= excluded.setting_description,
+advanced_flag= excluded.advanced_flag,
+modified_by= excluded.modified_by,
+modified_time= excluded.modified_time,
+app_module= excluded.app_module';
+status = 'saved';
+return status;
+end if;
+exception when others then
+GET STACKED DIAGNOSTICS status = PG_EXCEPTION_DETAIL;
+return status;
+end;
+$BODY$;
+
+ALTER FUNCTION public.xml_crud_put_setting(integer, character varying)
+    OWNER TO omkar;
+    
+    
+    
+    
+********************
+
+
+
+CREATE OR REPLACE FUNCTION public.xmsa_crud_get_settings(
+	wid integer)
+    RETURNS TABLE(app_setting_id bigint, setting_id character varying, setting_number bigint, setting_type_id integer, setting_value character varying, setting_value_type character varying, setting_description character varying, advanced_flag boolean, modified_by integer, modified_time timestamp without time zone, app_module character varying) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+begin
+return query select
+iws.app_setting_id,
+iws.setting_id,
+iws.setting_number,
+iws.setting_type_id,
+iws.setting_value,
+iws.setting_value_type,
+iws.setting_description,
+iws.advanced_flag,
+iws.modified_by,
+iws.modified_time,
+iws.app_module
+from in_workspace_setting iws
+where
+iws.workspace_id=wid ;
+end;
+$BODY$;
+
+
+
+
+****************
+
+CREATE OR REPLACE FUNCTION public.xmsa_crud_del_setting(
+	VARIADIC bdata integer[])
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare
+status varchar;
+i_max integer:=array_length(bdata,1);
+begin
+for i in 1..i_max loop
+delete from in_workspace_setting where app_setting_id =  bdata[i];
+
+end loop;
+
+status:='deleted';
+return status;
+exception when others then
+GET STACKED DIAGNOSTICS status =PG_EXCEPTION_DETAIL;
+return status;
+end;
+$BODY$;
+
+
+
+
+
+***************
+
+
+-- ALTER TABLE in_workspace_setting
+-- DROP CONSTRAINT app_module_check;
+
+-- ALTER TABLE in_workspace_setting
+-- ADD CONSTRAINT app_module_check CHECK (app_module::text = ANY (ARRAY['xpnp'::character varying::text, 'xpsa'::character varying::text, 'xsfc'::character varying::text, 'xmcv'::character varying::text, 'cxod'::character varying::text, 'xmdt'::character varying::text, 'xmcl'::character varying::text,'xmsa'::character varying::text]))
+    
+    

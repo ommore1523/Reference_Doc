@@ -1,0 +1,111 @@
+************************************************************************************************************************************
+******************************************************  ADD APPLICATION TO CAF STEPS  **********************************************
+************************************************************************************************************************************
+
+Devlopment Side:
+
+1. Change urls from environments.ts file
+2. copy case-comparison , crudtablelayout ,from caf ,menu, runlogs ,setting,to-caf 
+3. change production env urls from ui app
+4. add port to expose in angular.json  from ui app
+
+5. in cafui add xmsa_url:"http://localhost:4205/" url  (<appmodulename>_url:"url")
+6. in cafservice change  ports ,db , redis port from cofig file
+7. Add setting to en.json 
+
+# DB side 
+
+
+1. checked ab_user for check users present 
+#######################################################
+2. 
+-- select * from sy_application
+
+-- update sy_application 
+-- set general_attributes = '{
+--     "modules": [
+--         {
+--             "url": "http://192.168.1.178/xml/barcoding",
+--             "appmodule": "Barcode Reading",
+--             "getstarted": "./xml/barcode.mp4",
+--             "appmoduleid": "xmlbc",
+--             "appmoduleshortname": "Barcode"
+--         },
+--         {
+--             "url": "http://192.168.1.178/xml/imagelcassification",
+--             "appmodule": "Image Classification",
+--             "getstarted": "./xml/imagecl.mp4",
+--             "appmoduleid": "xmcl",
+--             "appmoduleshortname": "Image Classification"
+--         },
+--         {
+--             "url": "http://192.168.1.178/xml/imagedetection",
+--             "appmodule": "Image Detection",
+--             "getstarted": "./xml/imagedt.mp4",
+--             "appmoduleid": "xmdt",
+--             "appmoduleshortname": "Image Detection"
+--         },
+--         {
+--             "url": "http://192.168.1.178/xml/recommendation",
+--             "appmodule": "Recommendation Engine",
+--             "getstarted": "./xml/recommend.mp4",
+--             "appmoduleid": "xmlre",
+--             "appmoduleshortname": "Recommendation Engine"
+--         },
+--         {
+--             "url": "http://192.168.1.178/xml",
+--             "appmodule": "Sentiment Analysis",
+--             "getstarted": "./xml/sentiment.mp4",
+--             "appmoduleid": "xmsa",
+--             "appmoduleshortname": "Sentiment Analysis"
+--         }
+--     ],
+--     "ui_order": 4
+-- }'
+
+-- where application_id = 1
+
+###################################################################################################################
+
+2. in_model  : added new model  (update first sy_appication in_mode applicationid forein key with sy application)
+
+-- select * from in_model
+-- insert into in_model(model_id,application_id,model_name,model_description,modified_by,modified_time,app_module)
+-- values(16,1,'NLP Sentiment Analysis','NLP Sentimental Analysis model',1,NOW(),'xmsa')
+
+
+
+
+
+
+
+-- select * from in_workspace
+
+-- insert into in_workspace (workspace_id,model_id,case_id,workspace_name)
+-- values ((select max(workspace_id)+1 from in_workspace) , 16 ,1 ,'NLP Sentiment Analysis')
+
+
+
+INSERT INTO public.sy_user_model_right (
+model_right_id, user_id, model_id, view_access, edit_access, create_access, delete_access, modified_by, modified_time) VALUES (
+'34'::integer, '1'::integer, '23'::integer, true::boolean, true::boolean, true::boolean, true::boolean, '1'::integer, '2021-06-17 12:22:00'::timestamp without time zone)
+ returning model_right_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
